@@ -1,0 +1,31 @@
+{
+  "name": "gendifff",
+  "version": "1.0.0",
+  "description": "Compares two configuration files and shows a difference",
+  "bin": {
+    "gendiff": "bin/gendiff.js"
+  },
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RamilAlbakov/frontend-project-lvl2.git"
+  },
+  "author": "Ramil Albakov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RamilAlbakov/frontend-project-lvl2/issues"
+  },
+  "homepage": "https://github.com/RamilAlbakov/frontend-project-lvl2#readme",
+  "dependencies": {
+    "commander": "^6.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.7.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0"
+  }
+}
