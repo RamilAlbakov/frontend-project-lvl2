@@ -1,5 +1,5 @@
 #!/usr/bin/node
 
-import showHelp from '../src/help.js';
+import app from '../src/app.js';
 
-showHelp();
+app();
