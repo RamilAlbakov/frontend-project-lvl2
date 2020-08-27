@@ -1,8 +1,8 @@
 # gendifff
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/RamilAlbakov/frontend-project-lvl2/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/ecf0b49710a3978b6dac/maintainability)](https://codeclimate.com/github/RamilAlbakov/frontend-project-lvl2/maintainability)
 [![gendifff CI](https://github.com/RamilAlbakov/frontend-project-lvl2/workflows/gendifff%20CI/badge.svg)](https://github.com/RamilAlbakov/frontend-project-lvl2/actions)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage)](https://codeclimate.com/github/RamilAlbakov/frontend-project-lvl2/test_coverage)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/ecf0b49710a3978b6dac/test_coverage)](https://codeclimate.com/github/RamilAlbakov/frontend-project-lvl2/test_coverage)
 
 ## Usage
 
