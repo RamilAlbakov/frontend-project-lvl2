@@ -6,4 +6,10 @@
 
 ## Usage
 
-[![asciicast](https://asciinema.org/a/356060.svg)](https://asciinema.org/a/356060)
+### Compare JSON files
+
+[![asciicast](https://asciinema.org/a/356415.svg)](https://asciinema.org/a/356415)
+
+### Compare YAML files
+
+[![asciicast](https://asciinema.org/a/356416.svg)](https://asciinema.org/a/356416)

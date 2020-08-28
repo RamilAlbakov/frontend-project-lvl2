@@ -1,21 +1,5 @@
-import fs from 'fs';
-import process from 'process';
-import path from 'path';
 import _ from 'lodash';
-
-const getObject = (filepath) => {
-  let fileContent;
-
-  if (filepath.startsWith('/')) {
-    fileContent = fs.readFileSync(filepath, 'utf8');
-  } else {
-    const currentDir = process.cwd();
-    const absoluteFilePath = path.resolve(currentDir, filepath);
-    fileContent = fs.readFileSync(absoluteFilePath, 'utf8');
-  }
-
-  return JSON.parse(fileContent);
-};
+import getObject from './parsers.js';
 
 const getDifference = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
