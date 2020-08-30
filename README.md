@@ -13,3 +13,7 @@
 ### Compare YAML files
 
 [![asciicast](https://asciinema.org/a/356416.svg)](https://asciinema.org/a/356416)
+
+### Compare INI files
+
+[![asciicast](https://asciinema.org/a/356756.svg)](https://asciinema.org/a/356756)

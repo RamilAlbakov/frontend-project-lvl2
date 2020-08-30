@@ -1,4 +1,5 @@
 import yaml from 'js-yaml';
+import ini from 'ini';
 import fs from 'fs';
 import process from 'process';
 import path from 'path';
@@ -14,7 +15,10 @@ const getObject = (filepath) => {
     fileContent = fs.readFileSync(absoluteFilePath, 'utf8');
   }
 
-  return path.extname(filepath) === '.json' ? JSON.parse(fileContent) : yaml.safeLoad(fileContent);
+  const extName = path.extname(filepath);
+  if (extName === '.json') return JSON.parse(fileContent);
+  if (extName === '.yml') return yaml.safeLoad(fileContent);
+  return ini.parse(fileContent);
 };
 
 export default getObject;
