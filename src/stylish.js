@@ -8,14 +8,11 @@ const stylish = (diff, spaceCount) => {
   const result = keys.reduce(
     (acc, key) => {
       const value = diff[key];
+      const neededSpaceCount = isFormatedKey(key) ? spaceCount + 2 : spaceCount + 4;
       if (!_.isPlainObject(value)) {
-        return isFormatedKey(key) ? `${acc}\n${' '.repeat(spaceCount + 2)}${key}: ${value}`
-          : `${acc}\n${' '.repeat(spaceCount + 4)}${key}: ${value}`;
+        return `${acc}\n${' '.repeat(neededSpaceCount)}${key}: ${value}`;
       }
-      if (isFormatedKey(key)) {
-        return `${acc}\n${' '.repeat(spaceCount + 2)}${key}: ${stylish(value, spaceCount + 4)}`;
-      }
-      return `${acc}\n${' '.repeat(spaceCount + 4)}${key}: ${stylish(value, spaceCount + 4)}`;
+      return `${acc}\n${' '.repeat(neededSpaceCount)}${key}: ${stylish(value, spaceCount + 4)}`;
     },
     '',
   );
