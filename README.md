@@ -8,12 +8,12 @@
 
 ### Compare JSON files
 
-[![asciicast](https://asciinema.org/a/356415.svg)](https://asciinema.org/a/356415)
+[![asciicast](https://asciinema.org/a/357134.svg)](https://asciinema.org/a/357134)
 
 ### Compare YAML files
 
-[![asciicast](https://asciinema.org/a/356416.svg)](https://asciinema.org/a/356416)
+[![asciicast](https://asciinema.org/a/357135.svg)](https://asciinema.org/a/357135)
 
 ### Compare INI files
 
-[![asciicast](https://asciinema.org/a/356756.svg)](https://asciinema.org/a/356756)
+[![asciicast](https://asciinema.org/a/357136.svg)](https://asciinema.org/a/357136)
