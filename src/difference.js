@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import getObject from './parsers.js';
-import stylish from './stylish.js';
+import formatter from './formatters/index.js';
 
 const getObjsDiff = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
@@ -31,12 +31,12 @@ const getObjsDiff = (obj1, obj2) => {
   return difference;
 };
 
-const genDiff = (filepath1, filepath2) => {
+const genDiff = (filepath1, filepath2, formatterType = 'stylish') => {
   const obj1 = getObject(filepath1);
   const obj2 = getObject(filepath2);
   const diff = getObjsDiff(obj1, obj2);
 
-  return stylish(diff, 0);
+  return formatter(diff, formatterType);
 };
 
 export default genDiff;

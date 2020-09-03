@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 const isFormatedKey = (key) => key.startsWith('-') || key.startsWith('+');
 
-const stylish = (diff, spaceCount) => {
+const stylish = (diff, spaceCount = 0) => {
   const keys = Object.keys(diff);
 
   const result = keys.reduce(
