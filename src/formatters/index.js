@@ -1,15 +1,16 @@
 import stylish from './stylish.js';
 import plain from './plain.js';
+import json from './json.js';
 
 const formatter = (diff, formatterType) => {
-  if (formatterType === 'plain') {
-    return plain(diff);
+  switch (formatterType) {
+    case 'plain':
+      return plain(diff);
+    case 'json':
+      return json(diff);
+    default:
+      return stylish(diff);
   }
-  if (formatterType === 'stylish') {
-    return stylish(diff);
-  }
-
-  throw new Error('Unknown formatterType');
 };
 
 export default formatter;

@@ -6,18 +6,14 @@
 
 ## Usage
 
-### Compare JSON files - stylish formatter (by default)
+### Compare JSON files
 
-[![asciicast](https://asciinema.org/a/357134.svg)](https://asciinema.org/a/357134)
+[![asciicast](https://asciinema.org/a/358444.svg)](https://asciinema.org/a/358444)
 
-### Compare JSON files - plain formatter
+### Compare YAML files
 
-[![asciicast](https://asciinema.org/a/357623.svg)](https://asciinema.org/a/357623)
+[![asciicast](https://asciinema.org/a/358446.svg)](https://asciinema.org/a/358446)
 
-### Compare YAML files - stylish formatter (by default)
+### Compare INI files
 
-[![asciicast](https://asciinema.org/a/357135.svg)](https://asciinema.org/a/357135)
-
-### Compare INI files - stylish formatter (by default)
-
-[![asciicast](https://asciinema.org/a/357136.svg)](https://asciinema.org/a/357136)
+[![asciicast](https://asciinema.org/a/358447.svg)](https://asciinema.org/a/358447)
