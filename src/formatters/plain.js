@@ -1,38 +1,52 @@
 import _ from 'lodash';
 
 const getFormattedValue = (val) => {
-  let newVal;
   if (_.isPlainObject(val) || Array.isArray(val)) {
-    newVal = '[complex value]';
-  } else if (val !== true && val !== false) {
-    newVal = `'${val}'`;
-  } else {
-    newVal = val;
+    return '[complex value]';
   }
-  return newVal;
+  if (val === true || val === false) {
+    return val;
+  }
+  return `'${val}'`;
+};
+
+const getPlainKey = (key) => (key.startsWith('+ ') || key.startsWith('- ') ? key.slice(2) : key);
+
+const getKeyStatus = (key, keys) => {
+  if (key.startsWith('+ ')) {
+    const updatedKey = `- ${getPlainKey(key)}`;
+    return keys.includes(updatedKey) ? 'updated' : 'added';
+  }
+  if (key.startsWith('- ')) {
+    const updatedKey = `+ ${getPlainKey(key)}`;
+    if (!keys.includes(updatedKey)) return 'removed';
+  }
+  return 'unchanged';
 };
 
 const plain = (diff, parentKey = null) => {
   const keys = Object.keys(diff);
 
   const result = keys.reduce(
-    (acc, key, i, arr) => {
+    (acc, key) => {
       const val = diff[key];
-      const newValue = getFormattedValue(val);
-      const formattedKey = key.startsWith('+ ') || key.startsWith('- ') ? key.slice(2) : key;
-      const fullKey = parentKey ? `${parentKey}.${formattedKey}` : formattedKey;
+      const formattedValue = getFormattedValue(val);
+      const plainKey = getPlainKey(key);
+      const fullKey = parentKey ? `${parentKey}.${plainKey}` : plainKey;
+      const keyStatus = getKeyStatus(key, keys);
 
-      if (key.startsWith('+ ')) {
-        if (arr[i - 1] && formattedKey === arr[i - 1].slice(2)) {
-          const previousValue = getFormattedValue(diff[arr[i - 1]]);
-          return `${acc}Property '${fullKey}' was updated. From ${previousValue} to ${newValue}\n`;
-        }
-        return `${acc}Property '${fullKey}' was added with value: ${newValue}\n`;
+      if (keyStatus === 'added') {
+        return `${acc}Property '${fullKey}' was added with value: ${formattedValue}\n`;
       }
-      if (key.startsWith('- ') && formattedKey !== arr[i + 1].slice(2)) {
+      if (keyStatus === 'updated') {
+        const updatedKey = `- ${getPlainKey(key)}`;
+        const previousValue = getFormattedValue(diff[updatedKey]);
+        return `${acc}Property '${fullKey}' was updated. From ${previousValue} to ${formattedValue}\n`;
+      }
+      if (keyStatus === 'removed') {
         return `${acc}Property '${fullKey}' was removed\n`;
       }
-      if (newValue === '[complex value]') {
+      if (formattedValue === '[complex value]') {
         return `${acc}${plain(val, fullKey)}\n`;
       }
       return acc;

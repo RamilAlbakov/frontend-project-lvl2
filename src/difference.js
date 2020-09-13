@@ -11,19 +11,20 @@ const getObjsDiff = (obj1, obj2) => {
     (diff, key) => {
       const val1 = obj1[key];
       const val2 = obj2[key];
-      if (keys1.includes(key) && keys2.includes(key)) {
-        if (_.isPlainObject(val1) && _.isPlainObject(val2)) {
-          return { ...diff, [key]: getObjsDiff(val1, val2) };
-        }
-        if (val1 === val2) {
-          return { ...diff, [key]: obj1[key] };
-        }
-        return { ...diff, [`- ${key}`]: obj1[key], [`+ ${key}`]: obj2[key] };
+
+      if (!keys1.includes(key)) {
+        return { ...diff, [`+ ${key}`]: obj2[key] };
       }
-      if (keys1.includes(key)) {
+      if (!keys2.includes(key)) {
         return { ...diff, [`- ${key}`]: obj1[key] };
       }
-      return { ...diff, [`+ ${key}`]: obj2[key] };
+      if (val1 === val2) {
+        return { ...diff, [key]: obj1[key] };
+      }
+      if (_.isPlainObject(val1) && _.isPlainObject(val2)) {
+        return { ...diff, [key]: getObjsDiff(val1, val2) };
+      }
+      return { ...diff, [`- ${key}`]: obj1[key], [`+ ${key}`]: obj2[key] };
     },
     {},
   );
