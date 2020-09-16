@@ -1,23 +1,61 @@
 import _ from 'lodash';
 
-const isFormatedKey = (key) => key.startsWith('-') || key.startsWith('+');
+const addSpaces = 2;
 
-const stylish = (diff, spaceCount = 0) => {
-  const keys = Object.keys(diff);
+const objToString = (data, spaceCount) => {
+  if (!_.isPlainObject(data)) {
+    return data;
+  }
 
-  const result = keys.reduce(
-    (acc, key) => {
-      const value = diff[key];
-      const neededSpaceCount = isFormatedKey(key) ? spaceCount + 2 : spaceCount + 4;
+  const keys = Object.keys(data);
+  const spaces = ' '.repeat(spaceCount + addSpaces * 2);
+
+  const result = keys.map(
+    (key) => {
+      const value = data[key];
       if (!_.isPlainObject(value)) {
-        return `${acc}\n${' '.repeat(neededSpaceCount)}${key}: ${value}`;
+        return `${spaces}  ${key}: ${value}`;
       }
-      return `${acc}\n${' '.repeat(neededSpaceCount)}${key}: ${stylish(value, spaceCount + 4)}`;
+      return `${spaces}  ${key}: ${objToString(value, spaceCount + addSpaces * 2)}`;
     },
-    '',
   );
+  const spacesBeforBracket = ' '.repeat(spaceCount + addSpaces);
+  return `{\n${result.join('\n')}\n${spacesBeforBracket}}`;
+};
 
-  return `{${result}\n${' '.repeat(spaceCount)}}`;
+const stylish = (diff) => {
+  const iter = (data, spaceNum) => {
+    const neededSpaces = ' '.repeat(spaceNum + addSpaces);
+    const spaceCount = spaceNum + addSpaces;
+
+    const result = data.map(
+      (item) => {
+        const { key, type, value } = item;
+        if (type === 'added') {
+          return `${neededSpaces}+ ${key}: ${objToString(value, spaceCount)}`;
+        }
+        if (type === 'removed') {
+          return `${neededSpaces}- ${key}: ${objToString(value, spaceCount)}`;
+        }
+        if (type === 'unchanged') {
+          return `${neededSpaces}  ${key}: ${objToString(value, spaceCount)}`;
+        }
+        if (type === 'changed') {
+          const oldVal = `${neededSpaces}- ${key}: ${objToString(item.oldValue, spaceCount)}`;
+          const newVal = `${neededSpaces}+ ${key}: ${objToString(item.newValue, spaceCount)}`;
+          return `${oldVal}\n${newVal}`;
+        }
+
+        const newData = item.children;
+        return `${neededSpaces}  ${key}: ${iter(newData, spaceNum + addSpaces * 2)}`;
+      },
+    );
+
+    const spacesBeforBracket = ' '.repeat(spaceNum);
+    return `{\n${result.join('\n')}\n${spacesBeforBracket}}`;
+  };
+
+  return iter(diff, 0);
 };
 
 export default stylish;

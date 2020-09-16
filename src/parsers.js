@@ -1,8 +1,7 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
-import fs from 'fs';
-import path from 'path';
 import _ from 'lodash';
+import readFile from './readFile.js';
 
 const isNumber = (val) => !Number.isNaN(parseFloat(val));
 
@@ -26,15 +25,7 @@ const changeStrToNum = (obj) => {
   return result;
 };
 
-const getFileContent = (filepath) => {
-  const absoluteFilePath = path.resolve(filepath);
-  return fs.readFileSync(absoluteFilePath, 'utf8');
-};
-
-const getObject = (filepath) => {
-  const fileContent = getFileContent(filepath);
-  const extName = path.extname(filepath);
-
+const parseFileContent = (fileContent, extName) => {
   switch (extName) {
     case '.json':
       return JSON.parse(fileContent);
@@ -45,6 +36,11 @@ const getObject = (filepath) => {
     default:
       throw new Error('unsupported file format');
   }
+};
+
+const getObject = (filepath) => {
+  const [fileContent, extName] = readFile(filepath);
+  return parseFileContent(fileContent, extName);
 };
 
 export default getObject;

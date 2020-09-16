@@ -10,54 +10,34 @@ const getFormattedValue = (val) => {
   return `'${val}'`;
 };
 
-const getPlainKey = (key) => (key.startsWith('+ ') || key.startsWith('- ') ? key.slice(2) : key);
+const plain = (diff) => {
+  const iter = (data, ancestor) => {
+    const result = data
+      .filter((item) => item.type !== 'unchanged')
+      .map(
+        (item) => {
+          const { key, value, type } = item;
+          const newValue = getFormattedValue(value);
+          const fullKey = ancestor ? `${ancestor}.${key}` : key;
 
-const getKeyStatus = (key, keys) => {
-  if (key.startsWith('+ ')) {
-    const updatedKey = `- ${getPlainKey(key)}`;
-    return keys.includes(updatedKey) ? 'updated' : 'added';
-  }
-  if (key.startsWith('- ')) {
-    const updatedKey = `+ ${getPlainKey(key)}`;
-    if (!keys.includes(updatedKey)) return 'removed';
-  }
-  return 'unchanged';
-};
+          if (type === 'added') {
+            return `Property '${fullKey}' was added with value: ${newValue}`;
+          }
+          if (type === 'removed') {
+            return `Property '${fullKey}' was removed`;
+          }
+          if (type === 'changed') {
+            return `Property '${fullKey}' was updated. From ${getFormattedValue(item.oldValue)} to ${getFormattedValue(item.newValue)}`;
+          }
+          const newData = item.children;
+          return iter(newData, fullKey);
+        },
+      );
 
-const plain = (diff, parentKey = null) => {
-  const keys = Object.keys(diff);
+    return result.join('\n');
+  };
 
-  const result = keys.reduce(
-    (acc, key) => {
-      const val = diff[key];
-      const formattedValue = getFormattedValue(val);
-      const plainKey = getPlainKey(key);
-      const fullKey = parentKey ? `${parentKey}.${plainKey}` : plainKey;
-      const keyStatus = getKeyStatus(key, keys);
-
-      if (keyStatus === 'added') {
-        return `${acc}Property '${fullKey}' was added with value: ${formattedValue}\n`;
-      }
-      if (keyStatus === 'updated') {
-        const updatedKey = `- ${getPlainKey(key)}`;
-        const previousValue = getFormattedValue(diff[updatedKey]);
-        return `${acc}Property '${fullKey}' was updated. From ${previousValue} to ${formattedValue}\n`;
-      }
-      if (keyStatus === 'removed') {
-        return `${acc}Property '${fullKey}' was removed\n`;
-      }
-      if (formattedValue === '[complex value]') {
-        return `${acc}${plain(val, fullKey)}\n`;
-      }
-      return acc;
-    },
-    '',
-  );
-
-  return result
-    .split('\n')
-    .filter((item) => item !== '')
-    .join('\n');
+  return iter(diff, null);
 };
 
 export default plain;

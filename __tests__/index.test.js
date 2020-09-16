@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import genDiff from '../src/difference.js';
+import genDiff from '../src/index.js';
 import { expectedStylishDiff, expectedPlainDiff, expectedJsonDiff } from '../__fixtures__/expected.js';
 
 const __filename = fileURLToPath(import.meta.url);
