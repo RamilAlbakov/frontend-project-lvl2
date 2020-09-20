@@ -8,38 +8,19 @@ const compareObjects = (obj1, obj2) => {
       const [value1, value2] = [obj1[key], obj2[key]];
 
       if (!_.has(obj1, key)) {
-        return {
-          key,
-          value: value2,
-          type: 'added',
-        };
+        return { key, value: value2, type: 'added' };
       }
       if (!_.has(obj2, key)) {
-        return {
-          key,
-          value: value1,
-          type: 'removed',
-        };
+        return { key, value: value1, type: 'removed' };
       }
       if (_.isObject(value1) && _.isObject(value2)) {
-        return {
-          key,
-          type: 'complex',
-          children: compareObjects(value1, value2),
-        };
+        return { key, type: 'complex', children: compareObjects(value1, value2) };
       }
       if (value1 === value2) {
-        return {
-          key,
-          value: value1,
-          type: 'unchanged',
-        };
+        return { key, value: value1, type: 'unchanged' };
       }
       return {
-        key,
-        type: 'changed',
-        oldValue: value1,
-        newValue: value2,
+        key, type: 'changed', oldValue: value1, newValue: value2,
       };
     },
   );

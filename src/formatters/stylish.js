@@ -46,9 +46,7 @@ const stylish = (diff) => {
           const newVal = `${indent}+ ${key}: ${stringify(item.newValue, spaceCount)}`;
           return `${oldVal}\n${newVal}`;
         }
-
-        const newData = item.children;
-        return `${indent}  ${key}: ${iter(newData, nestedDepth + 1)}`;
+        return `${indent}  ${key}: ${iter(item.children, nestedDepth + 1)}`;
       },
     );
 
