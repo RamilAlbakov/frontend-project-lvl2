@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const getFormattedValue = (val) => {
+const stringify = (val) => {
   if (_.isPlainObject(val) || Array.isArray(val)) {
     return '[complex value]';
   }
@@ -17,20 +17,21 @@ const plain = (diff) => {
       .map(
         (item) => {
           const { key, value, type } = item;
-          const newValue = getFormattedValue(value);
+          const newValue = stringify(value);
           const fullKey = ancestor ? `${ancestor}.${key}` : key;
 
-          if (type === 'added') {
-            return `Property '${fullKey}' was added with value: ${newValue}`;
+          switch (type) {
+            case 'added':
+              return `Property '${fullKey}' was added with value: ${newValue}`;
+            case 'removed':
+              return `Property '${fullKey}' was removed`;
+            case 'changed':
+              return `Property '${fullKey}' was updated. From ${stringify(item.oldValue)} to ${stringify(item.newValue)}`;
+            case 'complex':
+              return iter(item.children, fullKey);
+            default:
+              throw new Error(`unknown type: ${type}`);
           }
-          if (type === 'removed') {
-            return `Property '${fullKey}' was removed`;
-          }
-          if (type === 'changed') {
-            return `Property '${fullKey}' was updated. From ${getFormattedValue(item.oldValue)} to ${getFormattedValue(item.newValue)}`;
-          }
-          const newData = item.children;
-          return iter(newData, fullKey);
         },
       );
 

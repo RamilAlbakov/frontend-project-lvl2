@@ -1,33 +1,46 @@
 import _ from 'lodash';
 
 const compareObjects = (obj1, obj2) => {
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
-  const allKeys = _.union(keys1, keys2).sort((a, b) => a.localeCompare(b));
+  const keys = _.sortBy(_.union(_.keys(obj1), _.keys(obj2)));
 
-  const difference = allKeys.map(
+  const difference = keys.map(
     (key) => {
       const [value1, value2] = [obj1[key], obj2[key]];
-      const item = { key };
 
-      if (!keys1.includes(key)) {
-        item.type = 'added';
-        item.value = value2;
-      } else if (!keys2.includes(key)) {
-        item.type = 'removed';
-        item.value = value1;
-      } else if (value1 === value2) {
-        item.type = 'unchanged';
-        item.value = value1;
-      } else if (_.isPlainObject(value1) && _.isPlainObject(value2)) {
-        item.type = 'complex';
-        item.children = compareObjects(value1, value2);
-      } else {
-        item.type = 'changed';
-        item.oldValue = value1;
-        item.newValue = value2;
+      if (!_.has(obj1, key)) {
+        return {
+          key,
+          value: value2,
+          type: 'added',
+        };
       }
-      return item;
+      if (!_.has(obj2, key)) {
+        return {
+          key,
+          value: value1,
+          type: 'removed',
+        };
+      }
+      if (_.isObject(value1) && _.isObject(value2)) {
+        return {
+          key,
+          type: 'complex',
+          children: compareObjects(value1, value2),
+        };
+      }
+      if (value1 === value2) {
+        return {
+          key,
+          value: value1,
+          type: 'unchanged',
+        };
+      }
+      return {
+        key,
+        type: 'changed',
+        oldValue: value1,
+        newValue: value2,
+      };
     },
   );
 

@@ -4,12 +4,14 @@ import json from './json.js';
 
 const formatter = (diff, formatterType) => {
   switch (formatterType) {
+    case 'stylish':
+      return stylish(diff);
     case 'plain':
       return plain(diff);
     case 'json':
       return json(diff);
     default:
-      return stylish(diff);
+      throw new Error(`unsupportted formatter type: ${formatterType}`);
   }
 };
 

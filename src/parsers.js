@@ -1,46 +1,44 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
 import _ from 'lodash';
-import readFile from './readFile.js';
 
-const isNumber = (val) => !Number.isNaN(parseFloat(val));
+const parseIni = (data) => {
+  const isNumber = (val) => !Number.isNaN(parseFloat(val));
 
-const changeStrToNum = (obj) => {
-  const keys = Object.keys(obj);
+  const changeStrToNum = (obj) => {
+    const keys = Object.keys(obj);
 
-  const result = keys.reduce(
-    (acc, key) => {
-      const val = obj[key];
-      if (isNumber(val)) {
-        return { ...acc, [key]: parseFloat(val) };
-      }
-      if (_.isPlainObject(val)) {
-        return { ...acc, [key]: changeStrToNum(val) };
-      }
-      return { ...acc, [key]: val };
-    },
-    {},
-  );
+    const result = keys.reduce(
+      (acc, key) => {
+        const val = obj[key];
+        if (isNumber(val)) {
+          return { ...acc, [key]: parseFloat(val) };
+        }
+        if (_.isPlainObject(val)) {
+          return { ...acc, [key]: changeStrToNum(val) };
+        }
+        return { ...acc, [key]: val };
+      },
+      {},
+    );
 
-  return result;
+    return result;
+  };
+
+  return changeStrToNum(ini.parse(data));
 };
 
-const parseFileContent = (fileContent, extName) => {
-  switch (extName) {
+const parse = (fileContent, format) => {
+  switch (format) {
     case '.json':
       return JSON.parse(fileContent);
     case '.yml':
       return yaml.safeLoad(fileContent);
     case '.ini':
-      return changeStrToNum(ini.parse(fileContent));
+      return parseIni(fileContent);
     default:
-      throw new Error('unsupported file format');
+      throw new Error(`unsupported file format: ${format}`);
   }
 };
 
-const getObject = (filepath) => {
-  const [fileContent, extName] = readFile(filepath);
-  return parseFileContent(fileContent, extName);
-};
-
-export default getObject;
+export default parse;
