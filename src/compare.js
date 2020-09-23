@@ -16,12 +16,12 @@ const compareObjects = (obj1, obj2) => {
       if (_.isObject(value1) && _.isObject(value2)) {
         return { key, type: 'complex', children: compareObjects(value1, value2) };
       }
-      if (value1 === value2) {
-        return { key, value: value1, type: 'unchanged' };
+      if (value1 !== value2) {
+        return {
+          key, type: 'changed', oldValue: value1, newValue: value2,
+        };
       }
-      return {
-        key, type: 'changed', oldValue: value1, newValue: value2,
-      };
+      return { key, value: value1, type: 'unchanged' };
     },
   );
 

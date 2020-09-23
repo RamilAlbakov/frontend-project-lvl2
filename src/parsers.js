@@ -6,22 +6,15 @@ const parseIni = (data) => {
   const isNumber = (val) => !Number.isNaN(parseFloat(val));
 
   const changeStrToNum = (obj) => {
-    const keys = Object.keys(obj);
-
-    const result = keys.reduce(
-      (acc, key) => {
-        const val = obj[key];
-        if (isNumber(val)) {
-          return { ...acc, [key]: parseFloat(val) };
-        }
-        if (_.isPlainObject(val)) {
-          return { ...acc, [key]: changeStrToNum(val) };
-        }
-        return { ...acc, [key]: val };
-      },
-      {},
-    );
-
+    const result = _.mapValues(obj, (value) => {
+      if (isNumber(value)) {
+        return parseFloat(value);
+      }
+      if (_.isObject(value)) {
+        return changeStrToNum(value);
+      }
+      return value;
+    });
     return result;
   };
 
@@ -30,11 +23,12 @@ const parseIni = (data) => {
 
 const parse = (fileContent, format) => {
   switch (format) {
-    case '.json':
+    case 'json':
       return JSON.parse(fileContent);
-    case '.yml':
+    case 'yml':
+    case 'yaml':
       return yaml.safeLoad(fileContent);
-    case '.ini':
+    case 'ini':
       return parseIni(fileContent);
     default:
       throw new Error(`unsupported file format: ${format}`);

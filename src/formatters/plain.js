@@ -1,13 +1,13 @@
 import _ from 'lodash';
 
 const stringify = (val) => {
-  if (_.isPlainObject(val) || Array.isArray(val)) {
+  if (_.isObject(val)) {
     return '[complex value]';
   }
-  if (val === true || val === false) {
-    return val;
+  if (typeof val === 'string') {
+    return `'${val}'`;
   }
-  return `'${val}'`;
+  return val;
 };
 
 const plain = (diff) => {
