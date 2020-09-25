@@ -11,24 +11,24 @@ const stringify = (val) => {
 };
 
 const plain = (diff) => {
-  const iter = (data, ancestor) => {
+  const iter = (data, ancestry = null) => {
     const result = data
       .filter((item) => item.type !== 'unchanged')
       .map(
         (item) => {
           const { key, value, type } = item;
           const newValue = stringify(value);
-          const fullKey = ancestor ? `${ancestor}.${key}` : key;
+          const newAncestry = ancestry ? `${ancestry}.${key}` : key;
 
           switch (type) {
             case 'added':
-              return `Property '${fullKey}' was added with value: ${newValue}`;
+              return `Property '${newAncestry}' was added with value: ${newValue}`;
             case 'removed':
-              return `Property '${fullKey}' was removed`;
+              return `Property '${newAncestry}' was removed`;
             case 'changed':
-              return `Property '${fullKey}' was updated. From ${stringify(item.oldValue)} to ${stringify(item.newValue)}`;
+              return `Property '${newAncestry}' was updated. From ${stringify(item.oldValue)} to ${stringify(item.newValue)}`;
             case 'complex':
-              return iter(item.children, fullKey);
+              return iter(item.children, newAncestry);
             default:
               throw new Error(`unknown type: ${type}`);
           }
@@ -38,7 +38,7 @@ const plain = (diff) => {
     return result.join('\n');
   };
 
-  return iter(diff, null);
+  return iter(diff);
 };
 
 export default plain;
