@@ -5,7 +5,8 @@ const compareObjects = (obj1, obj2) => {
 
   const difference = keys.map(
     (key) => {
-      const [value1, value2] = [obj1[key], obj2[key]];
+      const value1 = obj1[key];
+      const value2 = obj2[key];
 
       if (!_.has(obj1, key)) {
         return { key, value: value2, type: 'added' };
